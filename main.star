@@ -1,23 +1,34 @@
-# NOTE: If you're a VSCode user, you might like our VSCode extension: https://marketplace.visualstudio.com/items?itemName=Kurtosis.kurtosis-extension
 
-# Importing the Postgres package from the web using absolute import syntax
-# See also: https://docs.kurtosis.com/starlark-reference/import-module
-postgres = import_module("github.com/kurtosis-tech/postgres-package/main.star")
 
-# Importing a file inside this package using relative import syntax
-# See also: https://docs.kurtosis.com/starlark-reference/import-module
-lib = import_module("./lib/lib.star")
+def run(plan, 
+        prometheus_url, 
+        grafana_dashboards_directory_path, 
+        grafana_dashboards_name="Grafana Dashboards in Kurtosis"):
+        """Runs provided Grafana dashboards in Kurtosis.
 
-# For more information on...
-#  - the 'run' function:  https://docs.kurtosis.com/concepts-reference/packages#runnable-packages
-#  - the 'plan' object:   https://docs.kurtosis.com/starlark-reference/plan
-#  - arguments:           https://docs.kurtosis.com/run#arguments
-def run(plan, name = "John Snow"):
-    plan.print("Hello, " + name)
+        Args:
+            prometheus_url(string): Prometheus endpoint that will populate Grafana dashboard data.
+            grafana_dashboards_directory_path(string): Where to find Grafana dashboards config.
+            grafana_dashboards_name(string): Name of Grafana Dashboard provider.
+        """
 
-    # https://docs.kurtosis.com/starlark-reference/plan#upload_files
-    config_json = plan.upload_files("./static-files/config.json")
 
-    lib.run_hello(plan, config_json)
 
-    postgres.run(plan)
+        plan.add_service(name="grafana", config=ServiceConfig(
+            image="grafana/grafana-enterprise:9.5.12",
+            ports={
+                "http": PortSpec(
+                    number=3000,
+                    transport_protocol="TCP",
+                    application_protocol="http",
+                )
+            },
+            env_vars={
+                "GF_AUTH_ANONYMOUS_ENABLED": "true",
+                "GF_AUTH_ANONYMOUS_ORG_ROLE": "Admin",
+                "GF_AUTH_ANONYMOUS_ORG_NAME": "Main Org.",
+                "GF_DASHBOARDS_DEFAULT_HOME_DASHBOARD_PATH": "/dashboards/default.json",
+            },
+            files={
+            }
+        ))
