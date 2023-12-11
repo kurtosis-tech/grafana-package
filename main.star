@@ -12,7 +12,27 @@ def run(plan,
             grafana_dashboards_name(string): Name of Grafana Dashboard provider.
         """
 
+        # create config files artifacts based on datasource and dashboard providers info
+        datasource_config_template = plan.read_file(src="./static-files/datasource.yml.tmpl")
+        dashboard_provider_config_template = plan.read_file(src="./static-files/dashboard-providers.yml.tmpl")
+        grafana_config_files_artifact = plan.render_templates(
+            config={
+                "datasources/datasource.yml":struct(
+                    template=datasource_config_template,
+                    data={ "PrometheusURL": prometheus_url }
+                ),
+                "dashboards/dashboard-providers.yml":struct(
+                    template=dashboard_provider_config_template,
+                    data={
+                        "DashboardProviderName": grafana_dashboards_name,
+                        "DashboardsDirpath": grafana_dashboards_directory_path,
+                    }
+                ),
+            }
+        )
 
+        # upload grafana dashboards themselves depending on given path
+        grafana_dashboards_files_artifact = plan.upload_files(src=grafana_dashboards_directory_path, name="grafana-dashboards")
 
         plan.add_service(name="grafana", config=ServiceConfig(
             image="grafana/grafana-enterprise:9.5.12",
@@ -24,11 +44,14 @@ def run(plan,
                 )
             },
             env_vars={
+                "GF_PATHS_PROVISIONING": "/config",
                 "GF_AUTH_ANONYMOUS_ENABLED": "true",
                 "GF_AUTH_ANONYMOUS_ORG_ROLE": "Admin",
                 "GF_AUTH_ANONYMOUS_ORG_NAME": "Main Org.",
-                "GF_DASHBOARDS_DEFAULT_HOME_DASHBOARD_PATH": "/dashboards/default.json",
+                "GF_DASHBOARDS_DEFAULT_HOME_DASHBOARD_PATH": "/dashboards/default.json",  # what is the default dashboard for? is it needed?
             },
             files={
+                "/config": grafana_config_files_artifact,
+                "/dashboards": grafana_dashboards_files_artifact,
             }
         ))
