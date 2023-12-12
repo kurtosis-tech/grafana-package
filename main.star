@@ -14,8 +14,8 @@ def run(plan,
         """
 
         # create config files artifacts based on datasource and dashboard providers info
-        datasource_config_template = plan.read_file(src="./static-files/datasource.yml.tmpl")
-        dashboard_provider_config_template = plan.read_file(src="./static-files/dashboard-providers.yml.tmpl")
+        datasource_config_template = read_file(src="./static-files/datasource.yml.tmpl")
+        dashboard_provider_config_template = read_file(src="./static-files/dashboard-providers.yml.tmpl")
         grafana_config_files_artifact = plan.render_templates(
             config={
                 "datasources/datasource.yml":struct(
