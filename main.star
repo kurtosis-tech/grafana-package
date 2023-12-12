@@ -1,4 +1,5 @@
-
+CONFIG_DIR_PATH="/config"
+DASHBOARDS_DIR_PATH="/dashboards"
 
 def run(plan, 
         prometheus_url, 
@@ -8,7 +9,7 @@ def run(plan,
 
         Args:
             prometheus_url(string): Prometheus endpoint that will populate Grafana dashboard data.
-            grafana_dashboards_directory_path(string): Where to find Grafana dashboards config.
+            grafana_dashboards_directory_path(string): Where to find Grafana dashboards config (usually sitting somewhere repo of that's importing this package))
             grafana_dashboards_name(string): Name of Grafana Dashboard provider.
         """
 
@@ -31,7 +32,7 @@ def run(plan,
             }
         )
 
-        # upload grafana dashboards themselves depending on given path
+        # upload grafana dashboards from given path
         grafana_dashboards_files_artifact = plan.upload_files(src=grafana_dashboards_directory_path, name="grafana-dashboards")
 
         plan.add_service(name="grafana", config=ServiceConfig(
@@ -44,14 +45,14 @@ def run(plan,
                 )
             },
             env_vars={
-                "GF_PATHS_PROVISIONING": "/config",
+                "GF_PATHS_PROVISIONING": CONFIG_DIR_PATH,
                 "GF_AUTH_ANONYMOUS_ENABLED": "true",
                 "GF_AUTH_ANONYMOUS_ORG_ROLE": "Admin",
                 "GF_AUTH_ANONYMOUS_ORG_NAME": "Main Org.",
-                "GF_DASHBOARDS_DEFAULT_HOME_DASHBOARD_PATH": "/dashboards/default.json",  # what is the default dashboard for? is it needed?
+                "GF_DASHBOARDS_DEFAULT_HOME_DASHBOARD_PATH": DASHBOARDS_DIR_PATH + "/default.json",
             },
             files={
-                "/config": grafana_config_files_artifact,
-                "/dashboards": grafana_dashboards_files_artifact,
+                CONFIG_DIR_PATH: grafana_config_files_artifact,
+                DASHBOARDS_DIR_PATH: grafana_dashboards_files_artifact,
             }
         ))
