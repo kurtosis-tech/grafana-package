@@ -1,6 +1,6 @@
 Grafana Package
 ============
-This is a Grafana [Kurtosis](https://github.com/kurtosis-tech/kurtosis/) Grafpackage. Provided a Prometheus datasource and dashboard configuration files, it will spin up a Grafana instance for you!
+This is a [Kurtosis](https://github.com/kurtosis-tech/kurtosis/) package for integrating your services with Grafana! Provided a Prometheus datasource and dashboard configuration files, it will spin up a Grafana instance for you!
 
 Run this package
 ----------------
