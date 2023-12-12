@@ -29,7 +29,7 @@ NOTE: the `//` lines are not valid JSON; you will need to remove them!
     "prometheus_url": "'",
 
     // Path to Grafana dashboard configurations (usually sitting in repo of the script thats importing this package))
-    "grafana_dashboards_directory_path": "",
+    "grafana_dashboards_location": "",
 
     // Name for Grafana Dashboard Provider
     // Optional
@@ -43,7 +43,7 @@ The arguments can then be passed in to `kurtosis run`.
 For example:
 
 ```bash
-kurtosis run github.com/kurtosis-tech/grafana-package '{"prometheus_url":"127.0.0.1:9090", "grafana_dashboards_directory_path:"../static-files/dashboards/"}'
+kurtosis run github.com/kurtosis-tech/grafana-package '{"prometheus_url":"127.0.0.1:9090", "grafana_dashboards_location:"github.com/example-org/example-package/static-files/dashboards"}'
 ```
 
 You can also store the JSON args in a file, and use command expansion to slot them in:
@@ -89,8 +89,8 @@ def run(plan, args={}):
     # start a prometheus server that scrapes service_a's metrics and returns a prom url for querying those metrics
     prometheus_url = prometheus-package.run(plan, [service_a_metrics_job])
 
-    # start grafana where dashboards are located at ../static-files/dashboards relative to script
-    grafana.run(plan, prometheus_url, "../static-files/dashboards")
+    # start grafana where dashboards are located at github.com/example-org/example-package/static-files/dashboards
+    grafana.run(plan, prometheus_url, "github.com/example-org/example-package/static-files/dashboards")
 ```
 
 If you want to use a fork or specific version of this package in your own package, you can replace the dependencies in your `kurtosis.yml` file using the [replace](https://docs.kurtosis.com/concepts-reference/kurtosis-yml/#replace) primitive. 

@@ -3,13 +3,13 @@ DASHBOARDS_DIR_PATH="/dashboards"
 
 def run(plan, 
         prometheus_url, 
-        grafana_dashboards_directory_path, 
+        grafana_dashboards_location, 
         grafana_dashboards_name="Grafana Dashboards in Kurtosis"):
         """Runs provided Grafana dashboards in Kurtosis.
 
         Args:
             prometheus_url(string): Prometheus endpoint that will populate Grafana dashboard data.
-            grafana_dashboards_directory_path(string): Where to find Grafana dashboards config (usually sitting somewhere repo of that's importing this package))
+            grafana_dashboards_location(string): Where to find config for Grafana dashboard(s) (usually sitting somewhere repo of that's importing this package))
             grafana_dashboards_name(string): Name of Grafana Dashboard provider.
         """
 
@@ -26,14 +26,14 @@ def run(plan,
                     template=dashboard_provider_config_template,
                     data={
                         "DashboardProviderName": grafana_dashboards_name,
-                        "DashboardsDirpath": grafana_dashboards_directory_path,
+                        "DashboardsDirpath": DASHBOARDS_DIR_PATH,
                     }
                 ),
             }
         )
 
-        # upload grafana dashboards from given path
-        grafana_dashboards_files_artifact = plan.upload_files(src=grafana_dashboards_directory_path, name="grafana-dashboards")
+        # grab grafana dashboards from given location and upload them into enclave as a files artifact
+        grafana_dashboards_files_artifact = plan.upload_files(src=grafana_dashboards_location, name="grafana-dashboards")
 
         plan.add_service(name="grafana", config=ServiceConfig(
             image="grafana/grafana-enterprise:9.5.12",
