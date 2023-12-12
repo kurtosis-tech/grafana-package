@@ -49,7 +49,6 @@ def run(plan,
                 "GF_AUTH_ANONYMOUS_ENABLED": "true",
                 "GF_AUTH_ANONYMOUS_ORG_ROLE": "Admin",
                 "GF_AUTH_ANONYMOUS_ORG_NAME": "Main Org.",
-                "GF_DASHBOARDS_DEFAULT_HOME_DASHBOARD_PATH": DASHBOARDS_DIR_PATH + "/default.json",
             },
             files={
                 CONFIG_DIR_PATH: grafana_config_files_artifact,
