@@ -5,7 +5,9 @@ def run(plan,
         prometheus_url, 
         grafana_dashboards_location, 
         name="grafana",
-        grafana_dashboards_name="Grafana Dashboards in Kurtosis"):
+        grafana_dashboards_name="Grafana Dashboards in Kurtosis",
+        grafana_alerts_file,
+        ):
         """Runs provided Grafana dashboards in Kurtosis.
 
         Args:
@@ -30,6 +32,7 @@ def run(plan,
                         "DashboardsDirpath": DASHBOARDS_DIR_PATH,
                     }
                 ),
+                "alerting/alerts.yml": grafana_alerts_file,
             }
         )
 
