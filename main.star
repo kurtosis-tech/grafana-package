@@ -6,7 +6,7 @@ def run(plan,
         grafana_dashboards_location, 
         name="grafana",
         grafana_dashboards_name="Grafana Dashboards in Kurtosis",
-        grafana_alerts_file,
+        grafana_alerts_file=None,
         ):
         """Runs provided Grafana dashboards in Kurtosis.
 
