@@ -1,3 +1,1 @@
-name: "github.com/minhd-vu/grafana-package"
-replace:
-  github.com/kurtosis-tech/grafana-package: github.com/minhd-vu/grafana-package@alerts
+name: "github.com/kurtosis-tech/grafana-package"
