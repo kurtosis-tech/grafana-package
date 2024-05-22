@@ -90,7 +90,13 @@ def run(plan, args={}):
     prometheus_url = prometheus-package.run(plan, [service_a_metrics_job])
 
     # start grafana where dashboards are located at github.com/example-org/example-package/static-files/dashboards
-    grafana.run(plan, prometheus_url, "github.com/example-org/example-package/static-files/dashboards")
+    grafana.run(
+        plan,
+        prometheus_url,
+        "github.com/example-org/example-package/static-files/dashboards",
+        # optionally load predefined grafana alerts from file
+        grafana_alerts_file=read_file(src="./static-files/alerts.yaml"),
+    )
 ```
 
 If you want to use a fork or specific version of this package in your own package, you can replace the dependencies in your `kurtosis.yml` file using the [replace](https://docs.kurtosis.com/concepts-reference/kurtosis-yml/#replace) primitive. 
