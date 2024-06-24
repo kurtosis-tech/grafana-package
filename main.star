@@ -13,9 +13,10 @@ def run(
     """Runs provided Grafana dashboards in Kurtosis.
 
     Args:
-        prometheus_url(string): Prometheus endpoint that will populate Grafana dashboard data.
-        grafana_dashboards_location(string): Where to find config for Grafana dashboard(s) (usually sitting somewhere repo of that's importing this package))
-        grafana_dashboards_name(string): Name of Grafana Dashboard provider.
+        prometheus_url (string): Prometheus endpoint that will populate Grafana dashboard data.
+        grafana_dashboards_location (string): Where to find config for Grafana dashboard(s) (usually sitting somewhere in the repo that's importing this package).
+        grafana_dashboards_name (string): Name of Grafana Dashboard provider.
+        grafana_alerts_file (string, optional): Path to the Grafana alerts file (usually sitting somewhere in the repo that's importing this package).
     """
 
     # create config files artifacts based on datasource and dashboard providers info
