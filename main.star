@@ -38,8 +38,8 @@ def run(
                 },
             ),
             "alerting/alerts.yml": struct(
-                template=grafana_alerts_file,
-                data={},
+                template=read_file(grafana_alerts_file),
+                data={}
             ),
         }
     )

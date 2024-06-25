@@ -95,7 +95,7 @@ def run(plan, args={}):
         prometheus_url,
         "github.com/example-org/example-package/static-files/dashboards",
         # optionally load predefined grafana alerts from file
-        grafana_alerts_file=read_file(src="./static-files/alerts.yaml"),
+        grafana_alerts_file="github.com/example-org/example-package/static-files/alerts.yaml",
     )
 ```
 
