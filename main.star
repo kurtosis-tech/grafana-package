@@ -8,8 +8,8 @@ def run(
     grafana_dashboards_location,
     name="grafana",
     grafana_dashboards_name="Grafana Dashboards in Kurtosis",
-    grafana_alerts_template="",
-    grafana_alerts_data={},
+    grafana_alerting_template="",
+    grafana_alerting_data={},
 ):
     """Runs provided Grafana dashboards in Kurtosis.
 
@@ -17,7 +17,8 @@ def run(
         prometheus_url (string): Prometheus endpoint that will populate Grafana dashboard data.
         grafana_dashboards_location (string): Where to find config for Grafana dashboard(s) (usually sitting somewhere in the repo that's importing this package).
         grafana_dashboards_name (string): Name of Grafana Dashboard provider.
-        grafana_alerts_file (string, optional): Path to the Grafana alerts file (usually sitting somewhere in the repo that's importing this package).
+        grafana_alerting_template (string, optional): Path to the Grafana alerting file (usually sitting somewhere in the repo that's importing this package).
+        grafana_alerting_data (dict[string, string], optional): The data used when templating the grafana_alerting_template.
     """
 
     # create config files artifacts based on datasource and dashboard providers info
@@ -38,9 +39,9 @@ def run(
                     "DashboardsDirpath": DASHBOARDS_DIR_PATH,
                 },
             ),
-            "alerting/alerts.yml": struct(
-                template=read_file(grafana_alerts_template),
-                data=grafana_alerts_data,
+            "alerting/alerting.yml": struct(
+                template=read_file(grafana_alerting_template),
+                data=grafana_alerting_data,
             ),
         }
     )
