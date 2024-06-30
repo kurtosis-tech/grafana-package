@@ -8,7 +8,8 @@ def run(
     grafana_dashboards_location,
     name="grafana",
     grafana_dashboards_name="Grafana Dashboards in Kurtosis",
-    grafana_alerts_file="",
+    grafana_alerts_template="",
+    grafana_alerts_data={},
 ):
     """Runs provided Grafana dashboards in Kurtosis.
 
@@ -38,8 +39,8 @@ def run(
                 },
             ),
             "alerting/alerts.yml": struct(
-                template=read_file(grafana_alerts_file),
-                data={}
+                template=read_file(grafana_alerts_template),
+                data=grafana_alerts_data,
             ),
         }
     )
