@@ -55,7 +55,7 @@ def run(
     plan.add_service(
         name=name,
         config=ServiceConfig(
-            image=f"grafana/grafana-enterprise:{grafana_version}",
+            image="grafana/grafana-enterprise:" + grafana_version,
             ports={
                 "dashboards": PortSpec(
                     number=3000,
