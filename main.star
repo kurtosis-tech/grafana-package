@@ -8,6 +8,7 @@ def run(
     grafana_dashboards_location,
     name="grafana",
     grafana_dashboards_name="Grafana Dashboards in Kurtosis",
+    grafana_version="9.5.12",
     grafana_alerting_template="",
     grafana_alerting_data={},
 ):
@@ -54,7 +55,7 @@ def run(
     plan.add_service(
         name=name,
         config=ServiceConfig(
-            image="grafana/grafana-enterprise:11.1.0",
+            image=f"grafana/grafana-enterprise:{grafana_version}",
             ports={
                 "dashboards": PortSpec(
                     number=3000,
