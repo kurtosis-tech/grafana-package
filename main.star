@@ -11,6 +11,7 @@ def run(
     grafana_version="9.5.12",
     grafana_alerting_template="",
     grafana_alerting_data={},
+    postgres_databases=[],
 ):
     """Runs provided Grafana dashboards in Kurtosis.
 
@@ -32,7 +33,10 @@ def run(
         config={
             "datasources/datasource.yml": struct(
                 template=datasource_config_template,
-                data={"PrometheusURL": prometheus_url},
+                data={
+                    "PrometheusURL": prometheus_url,
+                    "PostgresDatabases": postgres_databases,
+                },
             ),
             "dashboards/dashboard-providers.yml": struct(
                 template=dashboard_provider_config_template,

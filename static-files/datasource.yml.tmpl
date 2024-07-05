@@ -10,3 +10,14 @@ datasources:
     basicAuth: false
     isDefault: true
     editable: true
+
+{{- range .PostgresDatabases }}
+  - name: {{ .Name }}
+    type: postgres
+    url: {{ .URL }}
+    user: {{ .User }}
+    secureJsonData:
+      password: '{{ .Password }}'
+    jsonData:
+      database: {{ .Name }}
+{{- end }}
