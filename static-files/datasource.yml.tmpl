@@ -20,4 +20,5 @@ datasources:
       password: '{{ .Password }}'
     jsonData:
       database: {{ .Name }}
+      sslmode: 'disable'
 {{- end }}
