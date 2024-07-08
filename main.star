@@ -22,6 +22,7 @@ def run(
         grafana_version (string, optional): The version of grafana to use.
         grafana_alerting_template (string, optional): Path to the Grafana alerting template file (usually sitting somewhere in the repo that's importing this package).
         grafana_alerting_data (dict[string, string], optional): The data used for templating the grafana_alerting_template.
+        postgres_databases (list[dict[string, string]], optional): The data used for templating the Postgres Grafana data source(s).
     """
 
     # create config files artifacts based on datasource and dashboard providers info

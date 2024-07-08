@@ -73,17 +73,26 @@ def run(plan, args={}):
     service_a = plan.add_service(name="sevice_a", config=ServiceConfig(
         ...
         ports = {
-            "metrics": PortSpec(number=9090, transport_protocol="TCP", application_protocol="http")
+            "metrics": PortSpec(number=9090, transport_protocol="TCP", application_protocol="http"),
+            "postgres": PortSpec(number=5432, application_protocol="postgresql"),
         },
         ...
     ))
 
     service_a_metrics_job = { 
-        "Name":"service_a", 
-        "Endpoint":"http://{0}:{1}".format(service_a.ip_address, service_a.ports["metrics"].number),
+        "Name": "service_a",
+        "Endpoint": "http://{0}:{1}".format(service_a.ip_address, service_a.ports["metrics"].number),
         "Labels": { 
-            "service_type": "backend" 
+            "service_type": "backend",
         }
+    }
+
+    service_a_database = {
+        "URL": "{0}:{1}".format(service_a.ip_address, service_a.ports["postgres"].number),
+        "Name": "database",
+        "User": "user",
+        "Password": "password",
+        "Version": 1500,
     }
 
     # start a prometheus server that scrapes service_a's metrics and returns a prom url for querying those metrics
@@ -99,6 +108,8 @@ def run(plan, args={}):
         # optionally load predefined grafana alerting configuration
         grafana_alerting_template="github.com/example-org/example-package/static-files/alerting.yml.tmpl",
         grafana_alerting_data={},
+        # optionally load postgres configuration
+        postgres_databases=[service_a_database],
     )
 ```
 
