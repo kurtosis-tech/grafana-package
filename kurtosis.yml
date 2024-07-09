@@ -1,3 +1,2 @@
-name: github.com/minhd-vu/grafana-package
-replace:
-  github.com/kurtosis-tech/grafana-package: github.com/minhd-vu/grafana-package@postgres-datasource
+name: "github.com/kurtosis-tech/grafana-package"
+
