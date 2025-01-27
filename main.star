@@ -12,6 +12,7 @@ def run(
     grafana_alerting_template="",
     grafana_alerting_data={},
     grafana_dashboards_files_artifact=None,
+    postgres_databases=[],
 ):
     """Runs provided Grafana dashboards in Kurtosis.
 
@@ -22,6 +23,7 @@ def run(
         grafana_version (string, optional): The version of grafana to use.
         grafana_alerting_template (string, optional): Path to the Grafana alerting template file (usually sitting somewhere in the repo that's importing this package).
         grafana_alerting_data (dict[string, string], optional): The data used for templating the grafana_alerting_template.
+        postgres_databases (list[dict[string, string]], optional): The data used for templating the Postgres Grafana data source(s).
     """
 
     # create config files artifacts based on datasource and dashboard providers info
@@ -29,24 +31,32 @@ def run(
     dashboard_provider_config_template = read_file(
         src="./static-files/dashboard-providers.yml.tmpl"
     )
+
+    grafana_render_templates_config = {
+        "datasources/datasource.yml": struct(
+            template=datasource_config_template,
+            data={
+                "PrometheusURL": prometheus_url,
+                "PostgresDatabases": postgres_databases,
+            },
+        ),
+        "dashboards/dashboard-providers.yml": struct(
+            template=dashboard_provider_config_template,
+            data={
+                "DashboardProviderName": grafana_dashboards_name,
+                "DashboardsDirpath": DASHBOARDS_DIR_PATH,
+            },
+        ),
+    }
+
+    if grafana_alerting_template != "":
+        grafana_render_templates_config["alerting/alerting.yml"] = struct(
+            template=read_file(grafana_alerting_template),
+            data=grafana_alerting_data,
+        )
+
     grafana_config_files_artifact = plan.render_templates(
-        config={
-            "datasources/datasource.yml": struct(
-                template=datasource_config_template,
-                data={"PrometheusURL": prometheus_url},
-            ),
-            "dashboards/dashboard-providers.yml": struct(
-                template=dashboard_provider_config_template,
-                data={
-                    "DashboardProviderName": grafana_dashboards_name,
-                    "DashboardsDirpath": DASHBOARDS_DIR_PATH,
-                },
-            ),
-            "alerting/alerting.yml": struct(
-                template=read_file(grafana_alerting_template),
-                data=grafana_alerting_data,
-            ),
-        }
+        config=grafana_render_templates_config,
     )
 
     if grafana_dashboards_files_artifact == None and grafana_dashboards_location != "":
