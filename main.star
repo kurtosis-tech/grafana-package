@@ -11,8 +11,8 @@ def run(
     grafana_version="9.5.12",
     grafana_alerting_template="",
     grafana_alerting_data={},
-    grafana_dashboards_files_artifact=None,
     postgres_databases=[],
+    grafana_dashboards_files_artifact=None,
 ):
     """Runs provided Grafana dashboards in Kurtosis.
 
