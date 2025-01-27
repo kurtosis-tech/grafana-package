@@ -12,7 +12,7 @@ def run(
     grafana_alerting_template="",
     grafana_alerting_data={},
     postgres_databases=[],
-    grafana_dashboards_files_artifact=None,
+    grafana_dashboards_files_artifact="",
 ):
     """Runs provided Grafana dashboards in Kurtosis.
 
