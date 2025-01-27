@@ -18,12 +18,13 @@ def run(
 
     Args:
         prometheus_url (string): Prometheus endpoint that will populate Grafana dashboard data.
-        grafana_dashboards_location (string): Where to find config for Grafana dashboard(s) (usually sitting somewhere in the repo that's importing this package).
-        grafana_dashboards_name (string): Name of Grafana Dashboard provider.
+        grafana_dashboards_location (string, optional): Where to find config for Grafana dashboard(s) (usually sitting somewhere in the repo that's importing this package). Setting this will override grafana_dashboards_files_artifact.
+        grafana_dashboards_name (string, optional): Name of Grafana Dashboard provider.
         grafana_version (string, optional): The version of grafana to use.
         grafana_alerting_template (string, optional): Path to the Grafana alerting template file (usually sitting somewhere in the repo that's importing this package).
         grafana_alerting_data (dict[string, string], optional): The data used for templating the grafana_alerting_template.
         postgres_databases (list[dict[string, string]], optional): The data used for templating the Postgres Grafana data source(s).
+        grafana_dashboards_files_artifact (string, optional): The dashboards files artifact, this will be overridden by grafana_dashboards_location if it's set.
     """
 
     # create config files artifacts based on datasource and dashboard providers info
@@ -59,7 +60,7 @@ def run(
         config=grafana_render_templates_config,
     )
 
-    if grafana_dashboards_files_artifact == None and grafana_dashboards_location != "":
+    if grafana_dashboards_location != "":
         # grab grafana dashboards from given location and upload them into enclave as a files artifact
         grafana_dashboards_files_artifact = plan.upload_files(
             src=grafana_dashboards_location, name="grafana-dashboards"
