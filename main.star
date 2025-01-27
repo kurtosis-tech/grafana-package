@@ -66,6 +66,13 @@ def run(
             src=grafana_dashboards_location, name="grafana-dashboards"
         )
 
+    files = {
+        CONFIG_DIR_PATH: grafana_dashboards_files_artifact
+    }
+
+    if grafana_dashboards_files_artifact != "":
+        files[DASHBOARDS_DIR_PATH] = grafana_dashboards_files_artifact
+
     plan.add_service(
         name=name,
         config=ServiceConfig(
@@ -83,9 +90,6 @@ def run(
                 "GF_AUTH_ANONYMOUS_ORG_ROLE": "Admin",
                 "GF_AUTH_ANONYMOUS_ORG_NAME": "Main Org.",
             },
-            files={
-                CONFIG_DIR_PATH: grafana_config_files_artifact,
-                DASHBOARDS_DIR_PATH: grafana_dashboards_files_artifact,
-            },
+            files=files,
         ),
     )
