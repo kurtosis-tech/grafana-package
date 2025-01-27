@@ -5,12 +5,13 @@ DASHBOARDS_DIR_PATH = "/dashboards"
 def run(
     plan,
     prometheus_url,
-    grafana_dashboards_location,
+    grafana_dashboards_location="",
     name="grafana",
     grafana_dashboards_name="Grafana Dashboards in Kurtosis",
     grafana_version="9.5.12",
     grafana_alerting_template="",
     grafana_alerting_data={},
+    grafana_dashboards_files_artifact=None,
 ):
     """Runs provided Grafana dashboards in Kurtosis.
 
@@ -48,10 +49,11 @@ def run(
         }
     )
 
-    # grab grafana dashboards from given location and upload them into enclave as a files artifact
-    grafana_dashboards_files_artifact = plan.upload_files(
-        src=grafana_dashboards_location, name="grafana-dashboards"
-    )
+    if grafana_dashboards_files_artifact == None:
+        # grab grafana dashboards from given location and upload them into enclave as a files artifact
+        grafana_dashboards_files_artifact = plan.upload_files(
+            src=grafana_dashboards_location, name="grafana-dashboards"
+        )
 
     plan.add_service(
         name=name,
