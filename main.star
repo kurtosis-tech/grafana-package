@@ -67,7 +67,7 @@ def run(
         )
 
     files = {
-        CONFIG_DIR_PATH: grafana_dashboards_files_artifact
+        CONFIG_DIR_PATH: grafana_config_files_artifact
     }
 
     if grafana_dashboards_files_artifact != "":
