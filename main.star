@@ -49,7 +49,7 @@ def run(
         }
     )
 
-    if grafana_dashboards_files_artifact == None && grafana_dashboards_location != "":
+    if grafana_dashboards_files_artifact == None and grafana_dashboards_location != "":
         # grab grafana dashboards from given location and upload them into enclave as a files artifact
         grafana_dashboards_files_artifact = plan.upload_files(
             src=grafana_dashboards_location, name="grafana-dashboards"
