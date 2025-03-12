@@ -80,8 +80,8 @@ def run(plan, args={}):
     ))
 
     service_a_metrics_job = { 
-        "Name":"service_a", 
-        "Endpoint":"{0}:{1}".format(service_a.ip_address, service_a.ports["metrics"].number),
+        "Name": "service_a",
+        "Endpoint": "{0}:{1}".format(service_a.ip_address, service_a.ports["metrics"].number),
         "Labels": { 
             "service_type": "backend",
         }
