@@ -73,7 +73,8 @@ def run(plan, args={}):
     service_a = plan.add_service(name="sevice_a", config=ServiceConfig(
         ...
         ports = {
-            "metrics": PortSpec(number=9090, transport_protocol="TCP", application_protocol="http")
+            "metrics": PortSpec(number=9090, transport_protocol="TCP", application_protocol="http"),
+            "postgres": PortSpec(number=5432, application_protocol="postgresql"),
         },
         ...
     ))
@@ -82,15 +83,34 @@ def run(plan, args={}):
         "Name":"service_a", 
         "Endpoint":"{0}:{1}".format(service_a.ip_address, service_a.ports["metrics"].number),
         "Labels": { 
-            "service_type": "backend" 
+            "service_type": "backend",
         }
+    }
+
+    service_a_database = {
+        "URL": "{0}:{1}".format(service_a.ip_address, service_a.ports["postgres"].number),
+        "Name": "database",
+        "User": "user",
+        "Password": "password",
+        "Version": 1500,
     }
 
     # start a prometheus server that scrapes service_a's metrics and returns a prom url for querying those metrics
     prometheus_url = prometheus-package.run(plan, [service_a_metrics_job])
 
     # start grafana where dashboards are located at github.com/example-org/example-package/static-files/dashboards
-    grafana.run(plan, prometheus_url, "github.com/example-org/example-package/static-files/dashboards")
+    grafana.run(
+        plan,
+        prometheus_url,
+        "github.com/example-org/example-package/static-files/dashboards",
+        # optionally set the grafana version
+        grafana_version="11.1.0",
+        # optionally load predefined grafana alerting configuration
+        grafana_alerting_template="github.com/example-org/example-package/static-files/alerting.yml.tmpl",
+        grafana_alerting_data={},
+        # optionally load postgres configuration
+        postgres_databases=[service_a_database],
+    )
 ```
 
 If you want to use a fork or specific version of this package in your own package, you can replace the dependencies in your `kurtosis.yml` file using the [replace](https://docs.kurtosis.com/concepts-reference/kurtosis-yml/#replace) primitive. 
