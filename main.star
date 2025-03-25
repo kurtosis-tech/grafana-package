@@ -8,7 +8,7 @@ def run(
     grafana_dashboards_location="",
     name="grafana",
     grafana_dashboards_name="Grafana Dashboards in Kurtosis",
-    grafana_version="9.5.12",
+    image="grafana/grafana-enterprise:9.5.12",
     grafana_alerting_template="",
     grafana_alerting_data={},
     postgres_databases=[],
@@ -20,7 +20,7 @@ def run(
         prometheus_url (string): Prometheus endpoint that will populate Grafana dashboard data.
         grafana_dashboards_location (string, optional): Where to find config for Grafana dashboard(s) (usually sitting somewhere in the repo that's importing this package). Setting this will override grafana_dashboards_files_artifact.
         grafana_dashboards_name (string, optional): Name of Grafana Dashboard provider.
-        grafana_version (string, optional): The version of grafana to use.
+        image (string, optional): The image to use.
         grafana_alerting_template (string, optional): Path to the Grafana alerting template file (usually sitting somewhere in the repo that's importing this package).
         grafana_alerting_data (dict[string, string], optional): The data used for templating the grafana_alerting_template.
         postgres_databases (list[dict[string, string]], optional): The data used for templating the Postgres Grafana data source(s).
@@ -75,7 +75,7 @@ def run(
     plan.add_service(
         name=name,
         config=ServiceConfig(
-            image="grafana/grafana-enterprise:" + grafana_version,
+            image=image,
             ports={
                 "http": PortSpec(
                     number=3000,
