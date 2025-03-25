@@ -57,6 +57,7 @@ def run(
         )
 
     grafana_config_files_artifact = plan.render_templates(
+        name="{}-config".format(name),
         config=grafana_render_templates_config,
     )
 
