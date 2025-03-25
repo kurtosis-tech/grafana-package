@@ -77,7 +77,7 @@ def run(
         config=ServiceConfig(
             image="grafana/grafana-enterprise:" + grafana_version,
             ports={
-                "dashboards": PortSpec(
+                "http": PortSpec(
                     number=3000,
                     transport_protocol="TCP",
                     application_protocol="http",
